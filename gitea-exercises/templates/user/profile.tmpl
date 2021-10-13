@@ -1,0 +1,78 @@
+{{template "base/head" .}}
+<div class="page-content user profile">
+    <div class="ui container">
+        <div class="ui stackable middle very relaxed page grid">
+            <div class="ui seven wide center aligned centered column">
+                <div class="ui card">
+                    {{if eq .SignedUserName .Owner.Name}}
+                        <a class="image poping up" href="{{AppSubUrl}}/user/settings" id="profile-avatar"
+                           data-content="{{.i18n.Tr "user.change_avatar"}}" data-variation="inverted tiny"
+                           data-position="bottom center">
+                            {{avatar .Owner 290}}
+                        </a>
+                    {{else}}
+                        <span class="image" id="profile-avatar">
+							{{avatar .Owner 290}}
+						</span>
+                    {{end}}
+                    <div class="content word-break profile-avatar-name">
+                        {{if .Owner.FullName}}<span class="header text center">{{.Owner.FullName}}</span>{{end}}
+                        <span class="username text center">{{.Owner.Name}}</span>
+                    </div>
+                    <div class="extra content word-break">
+                        <ul>
+                            {{if .Owner.Location}}
+                                <li>{{svg "octicon-location"}} {{.Owner.Location}}</li>
+                            {{end}}
+                            {{if .ShowUserEmail }}
+                                <li>
+                                    {{svg "octicon-mail"}}
+                                    <a href="mailto:{{.Owner.Email}}" rel="nofollow">{{.Owner.Email}}</a>
+                                </li>
+                            {{end}}
+                            {{if .Owner.Website}}
+                                <li>
+                                    {{svg "octicon-link"}}
+                                    <a target="_blank" rel="noopener noreferrer me"
+                                       href="{{.Owner.Website}}">{{.Owner.Website}}</a>
+                                </li>
+                            {{end}}
+                            {{if $.RenderedDescription}}
+                                <li>
+                                    <div class="render-content markup">{{$.RenderedDescription|Str2html}}</div>
+                                </li>
+                            {{end}}
+                            {{range .OpenIDs}}
+                                {{if .Show}}
+                                    <li>
+                                        {{svg "fontawesome-openid"}}
+                                        <a target="_blank" rel="noopener noreferrer" href="{{.URI}}">{{.URI}}</a>
+                                    </li>
+                                {{end}}
+                            {{end}}
+                            <li>{{svg "octicon-clock"}} {{.i18n.Tr "user.join_on"}} {{.Owner.CreatedUnix.FormatShort}}</li>
+                            {{if .Orgs}}
+                                <li>
+                                    <ul class="user-orgs">
+                                        {{range .Orgs}}
+                                            {{if or (.Visibility.IsPublic) ($.IsAdmin)}}
+                                                <li>
+                                                    <a class="poping up" href="{{.HomeLink}}" data-content="{{.Name}}"
+                                                       data-position="top center" data-variation="tiny inverted">
+                                                        {{avatar .}}
+                                                    </a>
+                                                </li>
+                                            {{end}}
+                                        {{end}}
+                                    </ul>
+                                </li>
+                            {{end}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{{template "base/footer" .}}

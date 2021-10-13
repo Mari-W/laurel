@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+read -r oldrev newrev _
+
+curl -f -s \
+  -X POST \
+  -H "Content-Type: application/json" \
+  --data "{ \"user\": \"$GITEA_PUSHER_NAME\", \"repo\": \"$GITEA_REPO_NAME\", \"owner\":\"$GITEA_REPO_USER_NAME\", \"files\":\"$(git diff --name-only "$oldrev".."$newrev")\" }" \
+  "http://courses-server:5001/hooks/gitea-post-receive"
+
+
+# git doesnt care, so lets be nice :)
+exit 0

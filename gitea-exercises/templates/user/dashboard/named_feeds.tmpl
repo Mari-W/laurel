@@ -1,0 +1,11 @@
+<div class="ui container six wide column">
+    <h4 class="ui top attached header">
+        Feed
+    </h4>
+    <div class="ui attached segment">
+        {{template "user/dashboard/feeds" .}}
+        {{ $length := len .Feeds }} {{ if eq $length 0 }}
+            Nothing to see here, at least yet.
+        {{ end }}
+    </div>
+</div>

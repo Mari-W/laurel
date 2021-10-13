@@ -1,0 +1,26 @@
+version: "3"
+
+networks:
+  laurel:
+    external: true
+
+services:
+  build-server:
+    build: "https://github.com/Mari-W/laurel-build-server"
+    container_name: laurel-build-server
+    restart: unless-stopped
+    volumes:
+      - ./.env:/app/.env
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    expose:
+      - '5002'
+    networks:
+      - laurel
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.build-server.rule=Host(`BUILD.DOMAIN.TLD`)"
+      - "traefik.http.services.build-server.loadbalancer.server.port=5002"
+      - "traefik.http.routers.build-server.entrypoints=websecure"
+      - "traefik.http.routers.build-server.tls.certresolver=https_resolver"

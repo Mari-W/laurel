@@ -1,0 +1,28 @@
+version: "3"
+
+networks:
+  laurel:
+    external: true
+
+services:
+  auth-server:
+    build: "https://github.com/Mari-W/laurel-auth-server"
+    container_name: laurel-auth-server
+    restart: unless-stopped
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    volumes:
+      - ./.env:/app/.env
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    expose:
+      - "5000"
+    networks:
+      - laurel
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth-server.rule=Host(`AUTH.DOMAIN.TLD`)"
+      - "traefik.http.services.auth-server.loadbalancer.server.port=5000"
+      - "traefik.http.routers.auth-server.entrypoints=websecure"
+      - "traefik.http.routers.auth-server.tls.certresolver=https_resolver"

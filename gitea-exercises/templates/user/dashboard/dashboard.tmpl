@@ -1,0 +1,15 @@
+{{template "base/head" .}}
+<div class="page-content dashboard feeds">
+    <div class="ui container">
+        {{template "base/alert" .}}
+        <div class="ui stackable grid">
+            <div class="ui row">
+                <div class="ui container ten wide column">
+                    {{template "user/dashboard/courses" .}}
+                </div>
+                {{template "user/dashboard/named_feeds" .}}
+            </div>
+        </div>
+    </div>
+</div>
+{{template "base/footer" .}}

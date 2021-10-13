@@ -1,0 +1,58 @@
+version: "3"
+
+networks:
+  laurel:
+    external: true
+
+services:
+  traefik:
+    image: traefik:v2.5
+    restart: unless-stopped
+    # Enables the web UI and tells Traefik to listen to docker
+    command:
+      # Webinterface reachable over port 8080.
+      #- "--api.insecure=true"
+
+      # Enable routing to docker images.
+      - "--providers.docker=true"
+
+      # Only connect to containers defining the label "traefik.enable=true".
+      - "--providers.docker.exposedbydefault=false"
+
+      # Define entry points for HTTP and HTTPS. We call them `web` and `websecure`.
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+
+      # Redirect HTTP to HTTPS.
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entryPoint.permanent=true"
+
+      # Specify a way to generate SSL certificates using lets encrypt. We call it `https_resolver`.
+      - "--certificatesresolvers.https_resolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.https_resolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.https_resolver.acme.email=USER@EMAIL.MAIL"
+      - "--certificatesresolvers.https_resolver.acme.storage=/lets_encrypt/acme.json"
+
+      # Logging
+      - "--log.level=WARN"
+      - "--log.filePath=/logs/traefik.log"
+      - "--accesslog=true"  # Log IPs
+      - "--accesslog.filepath=/logs/access.log"
+
+      # For debugging, gives us a fake SSL certificate without hitting lets encrypt limits.
+      #- "--certificatesresolvers.https_resolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      #- "--log.level=DEBUG"
+    ports:
+      # HTTP / HTTPS port
+      - "80:80"
+      - "443:443"
+      # The Web UI (enabled by --api.insecure=true)
+      # - "8080:8080"
+    volumes:
+      - "./lets_encrypt:/lets_encrypt"
+      - "./logs:/logs"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+    networks:
+      - laurel

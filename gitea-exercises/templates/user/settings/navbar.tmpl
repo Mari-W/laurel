@@ -1,0 +1,13 @@
+<div class="ui secondary pointing tabular top attached borderless menu stackable new-menu navbar">
+    <div class="new-menu-inner">
+        <a class="{{if .PageIsSettingsProfile}}active{{end}} item" href="{{AppSubUrl}}/user/settings">
+            Profile
+        </a>
+        <a class="{{if .PageIsSettingsAccount}}active{{end}} item" href="{{AppSubUrl}}/user/settings/account">
+            Account
+        </a>
+        <a class="{{if .PageIsSettingsKeys}}active{{end}} item" href="{{AppSubUrl}}/user/settings/keys">
+            Keys
+        </a>
+    </div>
+</div>

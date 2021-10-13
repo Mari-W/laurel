@@ -1,0 +1,61 @@
+# replace all capitalized values
+
+version: "3"
+
+networks:
+  laurel:
+    external: true
+
+services:
+  postgres:
+    build: .
+    container_name: laurel-postgres-sql
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: admin
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: POSTGRES_PASSWORD
+
+      AUTH_USER: auth
+      AUTH_PASS: AUTH_PASS
+
+      COURSES_USER: courses
+      COURSES_PASS: COURSES_PASS
+
+      GITEA_EXERCISES_USER: gitea_exercises
+      GITEA_EXERCISES_PASS: GITEA_EXERCISES_PASS
+
+      GITEA_EXAMS_USER: gitea_exams
+      GITEA_EXAMS_PASS: GITEA_EXAMS_PASS
+
+      BUILD_USER: build
+      BUILD_PASS: BUILD_PASS
+
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    networks:
+      - laurel
+    expose:
+      - "5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    environment:
+      PGADMIN_LISTEN_PORT: 5050
+      PGADMIN_DEFAULT_EMAIL: USER@EMAIL.MAIL
+      PGADMIN_DEFAULT_PASSWORD: PGADMIN_USER_PASS
+    expose:
+      - "5050"
+    networks:
+      - laurel
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pgadmin.rule=Host(`PGADMIN.DOMAIN.TLD`)"
+      - "traefik.http.services.pgadmin.loadbalancer.server.port=5050"
+      - "traefik.http.routers.pgadmin.entrypoints=websecure"
+      - "traefik.http.routers.pgadmin.tls.certresolver=https_resolver"
+
+volumes:
+  postgres-data:

@@ -1,0 +1,27 @@
+<button class="ui basic clone button no-transition" id="repo-clone-ssh"
+        data-link="{{if $.PageIsWiki}}{{$.WikiCloneLink.SSH}}{{else}}{{$.CloneLink.SSH}}{{end}}">
+    SSH
+</button>
+
+<input id="repo-clone-url" value="{{if $.PageIsWiki}}{{$.WikiCloneLink.SSH}}{{else}}{{$.CloneLink.SSH}}{{end}}"
+       readonly>
+
+<button class="ui basic icon button poping up" id="clipboard-btn" data-original="{{.i18n.Tr "repo.copy_link"}}"
+        data-success="{{.i18n.Tr "repo.copy_link_success"}}" data-error="{{.i18n.Tr "repo.copy_link_error"}}"
+        data-content="{{.i18n.Tr "repo.copy_link"}}" data-variation="inverted tiny"
+        data-clipboard-target="#repo-clone-url">
+    Copy
+</button>
+
+{{if not (and $.DisableHTTP $.DisableSSH)}}
+    <script defer>
+        const isSSH = true
+        const sshButton = document.getElementById('repo-clone-ssh');
+        const input = document.getElementById('repo-clone-url');
+        if (input) input.value = sshButton.dataset.link;
+        if (sshButton) sshButton.classList['add']('primary');
+        setTimeout(() => {
+            if (sshButton) sshButton.classList.remove('no-transition');
+        }, 100);
+    </script>
+{{end}}

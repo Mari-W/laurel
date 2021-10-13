@@ -1,0 +1,69 @@
+<div class="header-wrapper">
+    {{with .Repository}}
+    <div class="ui container">
+        <div class="repo-header">
+            <div class="repo-title-wrap df fc mb-4">
+                <div class="repo-title">
+                    <a href="{{AppSubUrl}}/{{.Owner.Name}}" id="repo_owner">{{.Owner.FullName}}</a>
+                    <div class="mx-2" style="display: none" id="slash">/</div>
+                    <a href="{{$.RepoLink}}" id="repo_name" style="display: none">{{.Name}}</a>
+                </div>
+            </div>
+            <div class="ui labeled button mb-4" data-position="top center" data-variation="tiny" tabindex="0">
+                <a class="ui compact small basic button disabled" id="tutor">
+                    Tutor
+                </a>
+                <a class="ui basic label disabled" id="tutor_name">
+                    Not found
+                </a>
+            </div>
+        </div>
+    </div><!-- end grid -->
+</div><!-- end container -->
+<div class="ui tabs divider"></div>
+<script>
+    function no_course_repo() {
+        document.getElementById("slash").style.removeProperty("display")
+        document.getElementById("repo_name").style.removeProperty("display")
+        document.getElementById("repo_owner").innerText = "{{.Owner.Name}}"
+        document.getElementById("tutor").style.display = "none"
+        document.getElementById("tutor_name").style.display = "none"
+        setTimeout(function () {
+            document.getElementById("builds").style.display = "none"
+            document.getElementById("chat").style.display = "none"
+        }, 1)
+    }
+
+    if ("{{.Name}}" === "tutors" || "{{.Name}}" === "template") {
+        no_course_repo()
+    } else {
+
+        fetch(COURSES_URL + "/courses/{{.Owner.Name}}/{{.Name}}/tutor", {
+            referrerPolicy: "origin",
+            credentials: "include"
+        }).then(res => {
+            if (!res.ok) {
+                if (res.status === 401) {
+                    const form = document.createElement("form")
+                    form.action = "/user/logout"
+                    form.method = "POST"
+                    document.body.appendChild(form);
+                    form.submit()
+                } else if (res.status === 500) {
+                    no_course_repo()
+                }
+            } else {
+                res.text().then(res => {
+                    let tutor = JSON.parse(res)
+                    let el = document.getElementById("tutor_name")
+                    el.innerText = tutor["name"]
+                    el.setAttribute("href", "/" + tutor["username"])
+                    el.classList.remove("disabled")
+                })
+            }
+        }).catch(_ => {
+            no_course_repo()
+        })
+    }
+</script>
+{{end}}

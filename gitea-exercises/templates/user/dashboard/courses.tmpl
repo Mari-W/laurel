@@ -1,0 +1,183 @@
+<div class="ui container">
+    <div class="ui container" style="margin-bottom: 2vh; display: none" id="info">
+        <h4 class="ui top attached header">
+            Information
+        </h4>
+        <div class="ui attached segment" id="info_content">
+            Currently there are no courses available, check back later.
+        </div>
+    </div>
+    <div class="ui container" style="margin-bottom: 2vh; display: none" id="my_courses">
+        <h4 class="ui top attached header">
+            Your Courses
+        </h4>
+        <div class="ui attached table segment">
+            <div class="ui attached table segment">
+                <table class="ui very basic striped table">
+                    <thead>
+                    <tr>
+                        <th>UID</th>
+                        <th>Name</th>
+                        <th>Website</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="my_courses_table">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="ui container" style="margin-bottom: 2vh; display: none" id="courses">
+        <h4 class="ui top attached header">
+            Available Courses
+        </h4>
+        <div class="ui attached table segment">
+            <div class="ui attached table segment">
+                <table class="ui very basic striped table">
+                    <thead>
+                    <tr>
+                        <th>UID</th>
+                        <th>Name</th>
+                        <th>Website</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="courses_table"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    fetch(COURSES_URL + "/courses/list", {
+        referrerPolicy: "origin",
+        credentials: "include",
+        redirect: 'follow',
+    }).then(res => res.text()).then(res => {
+        for (let [name, info] of Object.entries(JSON.parse(res))) {
+            if (info["role"] !== null && info["role"] !== "admin" && (!info["restricted"] || info["role"] !== "student")) {
+                const tr = document.createElement("tr")
+
+                const uid = document.createElement("td")
+                const link = document.createElement("a")
+                link.href = "/" + name
+                link.innerText = name
+                uid.appendChild(link)
+                tr.appendChild(uid)
+
+                const display = document.createElement("td")
+                display.innerText = info["display_name"]
+                tr.appendChild(display)
+
+                const website = document.createElement("td")
+                const link2 = document.createElement("a")
+                link2.href = info["website"]
+                link2.innerText = info["website"]
+                website.appendChild(link2)
+                tr.appendChild(website)
+
+                const role = document.createElement("td")
+                role.innerText = info["role"]
+                tr.appendChild(role)
+
+                const repo = document.createElement("td")
+
+                const form2 = document.createElement("form")
+                if (info["role"] === "student") {
+                    form2.action = "/" + name + "/{{.SignedUser.Name}}"
+                } else {
+                    form2.action = "/" + name
+                }
+                form2.method = "GET"
+
+
+                const btn2 = document.createElement("button")
+                btn2.type = "submit"
+                btn2.classList.add("ui", "button", "green")
+                btn2.innerText = "OPEN"
+                form2.appendChild(btn2)
+
+                repo.appendChild(form2)
+                tr.appendChild(repo)
+
+                document.getElementById("my_courses_table").appendChild(tr)
+            } else if (info["open"] || info["role"] === "admin") {
+                const tr = document.createElement("tr")
+
+                const uid = document.createElement("td")
+                uid.innerText = name
+                tr.appendChild(uid)
+
+                const display = document.createElement("td")
+                display.innerText = info["display_name"]
+                tr.appendChild(display)
+
+                const website = document.createElement("td")
+                const link = document.createElement("a")
+                link.href = info["website"]
+                link.innerText = info["website"]
+                website.appendChild(link)
+                tr.appendChild(website)
+
+
+                const join = document.createElement("td")
+
+                const form = document.createElement("form")
+                if (info["role"] !== "admin") {
+                    form.method = "POST"
+                    form.action = COURSES_URL + "/courses/join"
+                    const hidden = document.createElement("input")
+                    hidden.type = "hidden"
+                    hidden.name = "course"
+                    hidden.value = name
+                    form.appendChild(hidden)
+                } else {
+                    form.method = "GET"
+                    form.action = "/" + name
+                }
+                const btn = document.createElement("button")
+                btn.type = "submit"
+                btn.classList.add("ui", "button", "red")
+                if (info["role"] !== "admin") {
+                    btn.innerText = "JOIN"
+                    btn.id = name
+                    btn.onsubmit = function () {
+                        document.getElementById(name).disabled = true
+                    }
+                } else {
+                    btn.innerText = "OPEN"
+                }
+                form.appendChild(btn)
+
+                join.appendChild(form)
+                tr.appendChild(join)
+
+                document.getElementById("courses_table").appendChild(tr)
+            }
+        }
+        let my_c = document.getElementById("my_courses_table").childElementCount
+        let c = document.getElementById("courses_table").childElementCount
+        if (my_c !== 0) {
+            document.getElementById("my_courses").style.removeProperty("display")
+        }
+        if (c !== 0) {
+            document.getElementById("courses").style.removeProperty("display")
+        }
+        if (my_c === 0 && c === 0) {
+            document.getElementById("info").style.removeProperty("display")
+        }
+    }).catch(_ => {
+        {{if .IsAdmin}}
+        document.getElementById("info").style.removeProperty("display")
+        document.getElementById("info_content").innerText = "you are admin. if you are non-oauth-user -> no courses, otherwise re-login to gitea."
+        {{else}}
+        const form = document.createElement("form")
+        form.action = "/user/logout"
+        form.method = "POST"
+        document.body.appendChild(form);
+        form.submit()
+        {{end}}
+    });
+</script>

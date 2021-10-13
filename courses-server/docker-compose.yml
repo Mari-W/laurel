@@ -1,0 +1,28 @@
+version: "3"
+
+networks:
+  laurel:
+    external: true
+
+services:
+  courses-server:
+    build: "https://github.com/Mari-W/laurel-courses-server"
+    container_name: laurel-courses-server
+    restart: unless-stopped
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    volumes:
+      - ./.env:/app/.env
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    expose:
+      - '5001'
+    networks:
+      - laurel
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.courses-server.rule=Host(`COURSES.DOMAIN.TLD`)"
+      - "traefik.http.services.courses-server.loadbalancer.server.port=5001"
+      - "traefik.http.routers.courses-server.entrypoints=websecure"
+      - "traefik.http.routers.courses-server.tls.certresolver=https_resolver"

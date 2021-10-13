@@ -1,0 +1,37 @@
+version: "3"
+
+networks:
+  laurel:
+    external: true
+
+services:
+  gitea-exercises:
+    image: gitea/gitea:latest
+    container_name: laurel-gitea-exercises
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+      - ./app.ini:/data/gitea/conf/app.ini
+      - ./templates:/data/gitea/templates
+      - ./public/img:/data/gitea/public/img
+      - ./public/themes:/data/gitea/public/css
+      - ./hooks/laurel-pre-receive:/usr/share/git-core/templates/hooks/pre-receive.d/laurel
+      - ./hooks/laurel-post-receive:/usr/share/git-core/templates/hooks/post-receive.d/laurel
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    # expose ssh port
+    ports:
+      - "2222:22"
+    expose:
+      - "3000"
+    networks:
+      - laurel
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gitea-exercises.rule=Host(`GIT.DOMAIN.TLD`)"
+      - "traefik.http.services.gitea-exercises.loadbalancer.server.port=3000"
+      - "traefik.http.routers.gitea-exercises.entrypoints=websecure"
+      - "traefik.http.routers.gitea-exercises.tls.certresolver=https_resolver"

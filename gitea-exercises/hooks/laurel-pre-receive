@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+read -r oldrev newrev _
+
+if [[ "$oldrev" == "0000000000000000000000000000000000000000" ]]; then
+  exit 0
+fi
+
+# get status code, write content to file
+code=$(
+  curl -w "%{http_code}" -s \
+    -o "$GITEA_REPO_ID.txt" \
+    -X POST \
+    -H "Content-Type: application/json" \
+    --data "{ \"user\": \"$GITEA_PUSHER_NAME\", \"repo\": \"$GITEA_REPO_NAME\", \"owner\":\"$GITEA_REPO_USER_NAME\", \"files\":\"$(git diff --name-only "$oldrev".."$newrev")\" }" \
+    "http://courses-server:5001/hooks/gitea-pre-receive"
+)
+
+
+# if server responded there is a file
+if [ -f "$GITEA_REPO_ID.txt" ]; then
+
+  # read and remove
+  body="$(cat "$GITEA_REPO_ID.txt")"
+  rm "$GITEA_REPO_ID.txt"
+
+  # if status code is 200 signal OK
+  if [ "$code" -eq "200" ]; then
+    exit 0
+  # if status code is not 200 print server's error message and exit w/ error
+  else
+    printf "%s" "$body"
+    exit 1
+  fi
+fi
+
+# if server did not respond dont accept push
+printf "Connection to authorization server failed.\nPlease contact server administration."
+exit 1

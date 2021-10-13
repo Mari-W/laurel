@@ -1,0 +1,75 @@
+<div class="ui container" id="navbar">
+    <div class="item brand" style="justify-content: space-between;">
+        <a href="{{AppSubUrl}}/">
+            <img class="ui mini image" width="30" height="30" src="{{AssetUrlPrefix}}/img/logo.svg">
+        </a>
+        <div class="ui basic icon button mobile-only" id="navbar-expand-toggle">
+            <i class="sidebar icon"></i>
+        </div>
+    </div>
+
+    {{if and .IsSigned .MustChangePassword}}
+        {{/* No links */}}
+    {{else if .IsSigned}}
+        <a class="item {{if .PageIsDashboard}}active{{end}}" href="{{AppSubUrl}}/">Home</a>
+        {{if .IsAdmin}}
+            <div class="divider"></div>
+            <a class="item" id="admin">Admin</a>
+        {{end}}
+    {{end}}
+
+    {{template "custom/extra_links" .}}
+
+    {{if .IsSigned}}
+        <div class="right stackable menu">
+            <div class="ui dropdown jump item poping up" tabindex="-1"
+                 data-content="{{.i18n.Tr "user_profile_and_more"}}" data-variation="tiny inverted">
+				<span class="text">
+					{{avatar .SignedUser 24 "tiny"}}
+					<span class="sr-only">{{.i18n.Tr "user_profile_and_more"}}</span>
+					<span class="mobile-only">{{.SignedUser.Name}}</span>
+					<span class="fitted not-mobile" tabindex="-1">{{svg "octicon-triangle-down"}}</span>
+				</span>
+                <div class="menu user-menu" tabindex="-1">
+                    <div class="ui header">
+                        {{.i18n.Tr "signed_in_as"}} <strong>{{.SignedUser.Name}}</strong>
+                    </div>
+
+                    <div class="divider"></div>
+                    <a class="{{if .PageIsUserSettings}}active{{end}} item" href="{{AppSubUrl}}/user/settings">
+                        {{svg "octicon-tools"}}
+                        {{.i18n.Tr "your_settings"}}<!-- Your settings -->
+                    </a>
+                    {{if .IsAdmin}}
+                        <div class="divider"></div>
+                        <a class="{{if .PageIsAdmin}}active{{end}} item" href="{{AppSubUrl}}/admin">
+                            {{svg "octicon-server"}}
+                            {{.i18n.Tr "admin_panel"}}<!-- Admin Panel -->
+                        </a>
+                    {{end}}
+                    <div class="divider"></div>
+                    <a class="item link-action" href data-url="{{AppSubUrl}}/user/logout"
+                       data-redirect="http://courses.docker.localhost/auth/logout?redirect={{AppUrl}}">
+                        {{svg "octicon-sign-out"}}
+                        {{.i18n.Tr "sign_out"}}<!-- Sign Out -->
+                    </a>
+                </div><!-- end content avatar menu -->
+            </div><!-- end dropdown avatar menu -->
+        </div><!-- end signed user right menu -->
+    {{else}}
+        <div class="right stackable menu">
+            <a class="item{{if .PageIsSignIn}} active{{end}}" rel="nofollow"
+               href="http://courses.docker.localhost/auth/login?redirect={{AppUrl}}user/oauth2/uni">
+                {{svg "octicon-sign-in"}} {{.i18n.Tr "sign_in"}}
+            </a>
+        </div><!-- end anonymous right menu -->
+    {{end}}
+</div>
+<script>
+    const COURSES_URL = "http://courses.docker.localhost"
+    const BUILD_URL = "http://build.docker.localhost"
+    const CHAT_URL = "http://chat.docker.localhost"
+    {{if .IsAdmin}}
+    document.getElementById("admin").setAttribute("href", COURSES_URL + "/admin")
+    {{end}}
+</script>
