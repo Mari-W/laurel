@@ -3,7 +3,7 @@
 1. replace all capitalized values (not keys) inside:
     1. app.ini
     2. docker-compose.yml
-    3. templates/base/head_navbar.tmpl at the bottom of the pagey
+    3. templates/base/head_navbar.tmpl (inside HTML and bottom of page)
     4. new passwords/secrets of length (e.g) 24 can be generated using `./../gen_salt.sh 24`
 2. start gitea: `docker-compose up -d`
 3. create new admin user:
@@ -21,13 +21,13 @@
         4. `Redirect URIs`: GITEA_EXERCISES_PUBLIC_URL`/oauth/uni/callback`
         5. click `Add`
 5. login to gitea using this url: GITEA_EXERCISES_PUBLIC_URL/auth/login
-   1. login using the admin account you just created
+    1. login using the admin account you just created
 6. go to `Site Administration -> Authentication Sources` (top left)
-   1. Click `Add Authentication Source`
-      1. `Authentication Type`: `OAuth2`
-      2. `Authentication Name`: `uni`
-      3. `OAuth2 Provider`: `OpenID Connect`
-      4. `Client ID`: The client ID, copy from auth server
-      5. `Client Secret`: The client Secret, copy from auth server
-      6. `OpenID Connect Auto Discovery URL`: AUTH_PUBLIC_URL`/.well-known/openid-configuration`
-      7. Click `Add Authentication Source`
+    1. Click `Add Authentication Source`
+        1. `Authentication Type`: `OAuth2`
+        2. `Authentication Name`: `uni`
+        3. `OAuth2 Provider`: `OpenID Connect`
+        4. `Client ID`: The client ID, copy from auth server
+        5. `Client Secret`: The client Secret, copy from auth server
+        6. `OpenID Connect Auto Discovery URL`: AUTH_PUBLIC_URL`/.well-known/openid-configuration`
+        7. Click `Add Authentication Source`

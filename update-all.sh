@@ -3,7 +3,7 @@ git pull --rebase
 
 read -r -p "make sure that there are no new variables that needed to be placed inside configurations of all services, then press enter"
 
-echo "restarting all services, as well as rebuilding auth and courses server"
+echo "restarting all services, as well as rebuilding auth, build and courses server"
 echo ""
 echo ""
 
@@ -45,10 +45,11 @@ docker-compose pull
 docker-compose up -d --build
 cd .. || exit
 
-echo "restarting drone-ci"
+echo "rebuilding build-server"
 cd drone-ci || exit
 docker-compose down
-docker-compose up -d
+docker-compose pull
+docker-compose up -d --build
 cd .. || exit
 
 echo "restarting rocket-chat"
@@ -57,4 +58,4 @@ docker-compose down
 docker-compose up -d
 cd .. || exit
 
-echo "done. fingers crossed nothing broke but you should verify the logs or services online"
+echo "done. fingers crossed nothing broke but you should verify the logs or check that all services are online"

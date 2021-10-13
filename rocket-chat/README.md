@@ -100,6 +100,8 @@
                 4. click `Make Admin`
             3. go to `Settings -> Accounts`
                 1. disable `Show Default Login Form`
+            4. go to `Settings -> Message -> Katex`
+                1. enable "$$" syntax
 
 # TODO
 
