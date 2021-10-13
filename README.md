@@ -1,4 +1,4 @@
-# About
+# Laurel
 
 Laurel is a combination of multiple services into one learning platform, with a single login. It includes (but is not
 limited to):
@@ -46,4 +46,3 @@ limited to):
 7. setup gitea-exams (tbd)
 8. setup courses-server (instructions in directory)
 9. setup build-server (instructions in directory)
-10. ..?
