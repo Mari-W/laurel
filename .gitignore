@@ -1,1 +1,12 @@
 .idea
+
+traefik-proxy/lets_encrypt
+traefik-proxy/logs
+
+rocket-chat/data
+rocket-chat/uploads
+
+postgres-sql/data
+
+gitea-exercises/data
+gitea-exams/data
