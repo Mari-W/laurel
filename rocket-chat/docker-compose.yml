@@ -30,7 +30,7 @@ services:
       - laurel
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.rocket-chat.rule=Host(`AUTH.DOMAIN.TLD`)"
+      - "traefik.http.routers.rocket-chat.rule=Host(`CHAT.DOMAIN.TLD`)"
       - "traefik.http.services.rocket-chat.loadbalancer.server.port=4000"
       - "traefik.http.routers.rocket-chat.entrypoints=websecure"
       - "traefik.http.routers.rocket-chat.tls.certresolver=https_resolver"
