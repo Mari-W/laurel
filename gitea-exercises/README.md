@@ -8,7 +8,7 @@
 2. start gitea: `docker-compose up -d`
 3. create new admin user:
     1. `docker-compose exec --user git gitea-exercises bash`
-    2. `gitea admin user create --username laurel --password PASsWORD --email laurel@laurel.lel --admin`
+    2. `gitea admin user create --username laurel --password PASSWORD --email laurel@laurel.lel --admin`
     3. a new password of length (e.g) 24 can be generated using `./../gen_salt.sh 24`
     4. keep the password!
 4. create a new oauth authentication source

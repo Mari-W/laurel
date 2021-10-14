@@ -1,5 +1,5 @@
 echo "updating this repository"
-git pull --rebase
+git pull --rebase --autostash
 
 read -r -p "make sure that there are no new variables that needed to be placed inside configurations of all services, then press enter"
 
