@@ -1,7 +1,9 @@
 # Setup Instructions
 
-1. create new client in auth server
-    1. by now you should be able to, scopes: `openid profile email`
+1. create new client in auth server (as before)
+    1. name: courses
+    2. scopes: openid profile email
+    3. callback: COURSES_PUBLIC_URL`/auth/callback`
 2. replace capitalized values inside `.env`, note:
 3. place the same domain as entered on top of the `.env` file inside the docker-compose file
    at `traefik.http.routers.courses-server.rule`
