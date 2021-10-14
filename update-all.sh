@@ -32,6 +32,7 @@ docker-compose down
 docker-compose up -d
 cd .. || exit
 
+# tbd
 # echo "restarting gitea-exams"
 # cd gitea-exams || exit
 # docker-compose down
