@@ -6,7 +6,7 @@ networks:
 
 services:
   courses-server:
-    build: "https://github.com/Mari-W/laurel-courses-server"
+    build: "https://github.com/Mari-W/laurel-courses-server.git"
     container_name: laurel-courses-server
     restart: unless-stopped
     environment:

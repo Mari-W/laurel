@@ -6,7 +6,7 @@ networks:
 
 services:
   build-server:
-    build: "https://github.com/Mari-W/laurel-build-server"
+    build: "https://github.com/Mari-W/laurel-build-server.git"
     container_name: laurel-build-server
     restart: unless-stopped
     volumes:

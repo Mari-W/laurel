@@ -6,7 +6,7 @@ networks:
 
 services:
   auth-server:
-    build: "https://github.com/Mari-W/laurel-auth-server"
+    build: "https://github.com/Mari-W/laurel-auth-server.git"
     container_name: laurel-auth-server
     restart: unless-stopped
     environment:
