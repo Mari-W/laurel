@@ -16,6 +16,7 @@
             <div class="divider"></div>
             <a class="item" id="admin">Admin</a>
         {{end}}
+        <a class="item" href="http://chat.docker.localhost">Chat</a>
     {{end}}
 
     {{template "custom/extra_links" .}}
@@ -68,7 +69,6 @@
 <script>
     const COURSES_URL = "http://courses.docker.localhost"
     const BUILD_URL = "http://build.docker.localhost"
-    const CHAT_URL = "http://chat.docker.localhost"
     {{if .IsAdmin}}
     document.getElementById("admin").setAttribute("href", COURSES_URL + "/admin")
     {{end}}

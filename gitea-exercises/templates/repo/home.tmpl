@@ -39,9 +39,6 @@
                         <a class="ui button" target="_blank" id="builds">
                             Builds
                         </a>
-                        <a class="ui button" target="_blank" id="chat">
-                            Chat
-                        </a>
                     </div>
                 </div>
             {{else}}
@@ -121,5 +118,4 @@
 {{template "base/footer" .}}
 <script>
     document.getElementById("builds").setAttribute("href", BUILD_URL + "/builds/{{ .Repository.Owner.Name }}/{{.Repository.Name}}")
-    document.getElementById("chat").setAttribute("href", CHAT_URL + "/group/{{ .Repository.Owner.Name }}")
 </script>
