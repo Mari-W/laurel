@@ -1,0 +1,36 @@
+version: "3"
+
+networks:
+  laurel:
+    external: true
+
+services:
+  exam-server:
+    build: "https://github.com/Mari-W/laurel-exam-server.git"
+    container_name: laurel-exam-server
+    restart: unless-stopped
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    volumes:
+      - ./.env:/app/.env
+      - ./skel:/etc/skel/${EXAM_ID}/
+      - ./home:/home
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    expose:
+      - "5003"
+      - "22"
+    ports:
+      - "22:22"
+    networks:
+      - laurel
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.exam-server.rule=Host(`EXAM.DOMAIN.TLD`)"
+      - "traefik.http.services.exam-server.loadbalancer.server.port=5003"
+      - "traefik.http.routers.exam-server.entrypoints=websecure"
+      - "traefik.http.routers.exam-server.tls.certresolver=https_resolver"
+
+
+
