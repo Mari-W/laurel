@@ -20,9 +20,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
     expose:
       - "5003"
-      - "22"
+      - "2222"
     ports:
-      - "22:22"
+      - "2222:2222"
     networks:
       - laurel
     labels:
