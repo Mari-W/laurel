@@ -14,7 +14,6 @@ services:
       - USER_GID=1000
     volumes:
       - ./.env:/app/.env
-      - ./users/:/app/users/
       - ./skel:/etc/skel/${EXAM_ID}/
       - ./home:/home/
       - /etc/timezone:/etc/timezone:ro
