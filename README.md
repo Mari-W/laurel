@@ -18,8 +18,10 @@ limited to):
     - Add Tutors which all get the needed permissions to perform grading, etc
     - API for fetching exercise point distributions among students, time spent on exercises, etc
     - See more [here](https://github.com/Mari-W/laurel-courses-server)
-- Exam Management
-  - tbd.
+- Exam Managament
+    - Provides network directories per student based on template directory
+    - During exams all work will always be saved on the server, when editing files inside the mounted network folder locally
+    - See more [here](https://github.com/Mari-W/laurel-exam-server)
 - Build Server
     - Very simple build service using docker
     - Uses dependency graph of commands to execute
