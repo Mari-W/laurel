@@ -15,7 +15,7 @@ code=$(
     -o "$GITEA_REPO_ID.txt" \
     -X POST \
     -H "Content-Type: application/json" \
-    -d "@$GITEA_REPO_ID.txt" \
+    --data "@$GITEA_REPO_ID.txt" \
     "http://courses-server:5001/hooks/gitea-pre-receive"
 )
 
