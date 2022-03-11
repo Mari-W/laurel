@@ -2,12 +2,17 @@
 
 read -r oldrev newrev _
 
+
+echo "{ \"user\": \"$GITEA_PUSHER_NAME\", \"repo\": \"$GITEA_REPO_NAME\", \"owner\":\"$GITEA_REPO_USER_NAME\", \"files\":\"$(git diff --name-only "$oldrev".."$newrev")\" }" > "$GITEA_REPO_ID.txt"
+
+
 curl -f -s \
   -X POST \
   -H "Content-Type: application/json" \
-  --data "{ \"user\": \"$GITEA_PUSHER_NAME\", \"repo\": \"$GITEA_REPO_NAME\", \"owner\":\"$GITEA_REPO_USER_NAME\", \"files\":\"$(git diff --name-only "$oldrev".."$newrev")\" }" \
+  --data "@$GITEA_REPO_ID.txt" \
   "http://courses-server:5001/hooks/gitea-post-receive"
 
+rm "$GITEA_REPO_ID.txt"
 
 # git doesnt care, so lets be nice :)
 exit 0
