@@ -6,13 +6,16 @@ if [[ "$oldrev" == "0000000000000000000000000000000000000000" ]]; then
   exit 0
 fi
 
+# write json to file
+echo "{ \"user\": \"$GITEA_PUSHER_NAME\", \"repo\": \"$GITEA_REPO_NAME\", \"owner\":\"$GITEA_REPO_USER_NAME\", \"files\":\"$(git diff --name-only "$oldrev".."$newrev")\" }" > "$GITEA_REPO_ID.txt"
+
 # get status code, write content to file
 code=$(
   curl -w "%{http_code}" -s \
     -o "$GITEA_REPO_ID.txt" \
     -X POST \
     -H "Content-Type: application/json" \
-    --data "{ \"user\": \"$GITEA_PUSHER_NAME\", \"repo\": \"$GITEA_REPO_NAME\", \"owner\":\"$GITEA_REPO_USER_NAME\", \"files\":\"$(git diff --name-only "$oldrev".."$newrev")\" }" \
+    -d "@$GITEA_REPO_ID.txt" \
     "http://courses-server:5001/hooks/gitea-pre-receive"
 )
 
