@@ -39,12 +39,14 @@ limited to):
 
 # Setup Instructions
 
+setup instructions for one specific service can be found in its directory
+
 1. create new docker network named laurel: `docker network create laurel`
-2. setup traefik-proxy (instructions in directory)
-3. setup postgres-sql (instructions in directory)
-4. setup auth-server (instructions in directory)
-5. setup rocket-chat (instructions in directory)
-6. setup gitea-exercises (instructions in directory)
-7. setup gitea-exams (tbd)
-8. setup courses-server (instructions in directory)
-9. setup build-server (instructions in directory)
+2. setup traefik-proxy
+3. setup postgres-sql
+4. setup auth-server
+5. setup rocket-chat
+6. setup gitea-exercises
+7. setup courses-server
+8. setup build-server
+9. setup exam-server
