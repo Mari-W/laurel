@@ -9,7 +9,11 @@
    at `traefik.http.routers.exam-server.rule`
 4. start the auth-server: `docker-compose up -d`
 5. check that the system is up and running without errors: `docker-compose logs`
+6. replace `BACKUP_DIR` with actual backup dir in `backup.sh`
 
 # Usage
 Place all files that the student should have when starting the exam inside the skel folder.
 It is possible the contents of that folder without restarting the server!
+
+# Backup
+Perform a backup after the exam is written 

@@ -50,3 +50,4 @@ setup instructions for one specific service can be found in its directory
 7. setup courses-server
 8. setup build-server
 9. setup exam-server
+10. replace `BACKUP_DIR` with actual backup dir in `backup.sh`
