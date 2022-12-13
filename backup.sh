@@ -21,3 +21,5 @@ cp -r data backup_gitea_`date +%d-%m-%Y"_"%H_%M_%S`
 echo "Moving.."
 mv backup_gitea_* BACHKUP_DIR
 cd ..
+
+echo "Done."
