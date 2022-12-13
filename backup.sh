@@ -9,7 +9,7 @@ cd postgres-sql
 echo "Copying.."
 docker exec -t postgres_postgres_1 pg_dumpall -c -U admin > backup_postgres_`date +%d-%m-%Y"_"%H_%M_%S`.sql
 echo "Moving.."
-mv backup_postgres_*.sql BACKUP_DIR
+mv backup_postgres_*.sql $BACKUP_DIR
 cd ..
 
 # gitea
@@ -19,7 +19,7 @@ cd gitea-exercises
 echo "Copying.."
 cp -r data backup_gitea_`date +%d-%m-%Y"_"%H_%M_%S`
 echo "Moving.."
-mv backup_gitea_* BACKUP_DIR
+mv backup_gitea_* $BACKUP_DIR
 cd ..
 
 echo "Done."
